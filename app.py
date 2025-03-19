@@ -109,7 +109,7 @@ def handle_api_key_submit():
         st.session_state.messages.append({"role": "assistant", "content": "Hi there! I'm Buddy, your AI assistant. How can I help you today?"})
 
 # Main app layout
-st.title("🤖 Buddy AI Assistant")
+st.title("🤖 Buddy The AI Assistant")
 
 # Sidebar for API key and controls
 with st.sidebar:
