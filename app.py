@@ -5,7 +5,7 @@ from datetime import datetime
 
 # Configure basic page settings
 st.set_page_config(
-    page_title="AI Chatbot",
+    page_title="Buddy AI",
     page_icon="🤖",
     layout="wide"
 )
@@ -109,7 +109,7 @@ def handle_api_key_submit():
         st.session_state.messages.append({"role": "assistant", "content": "Hi there! I'm Buddy, your AI assistant. How can I help you today?"})
 
 # Main app layout
-st.title("🤖 AI Chatbot Assistant")
+st.title("🤖 Buddy AI Assistant")
 
 # Sidebar for API key and controls
 with st.sidebar:
