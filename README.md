@@ -13,7 +13,7 @@ Try the chatbot live: [Buddy AI Assistant](https://buddy-ai-assistant.streamlit.
 
 ## Video Demo
 
-[Watch the video demonstration](https://drive.google.com/file/d/1JRLlrPbdPDwXekhMkvFcPXhQ1rh_dwsb/view?usp=sharing)
+[Watch the video demonstration](https://drive.google.com/file/d/1X74EWv-tN2jjP7SAsVg69mbJCQLi8iah/view?usp=sharing)
 
 
 ## Features
