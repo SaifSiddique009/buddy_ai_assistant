@@ -3,14 +3,14 @@ import google.generativeai as genai
 import json
 from datetime import datetime
 
-# Set page configuration
+# Configure basic page settings
 st.set_page_config(
     page_title="AI Chatbot",
     page_icon="🤖",
     layout="wide"
 )
 
-# Initialize session state variables if they don't exist
+# Initialize variables to store chat history and settings
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -23,7 +23,7 @@ if "chat" not in st.session_state:
 if "api_key_from_secrets" not in st.session_state:
     st.session_state.api_key_from_secrets = None
 
-# Different persona prompts
+# Different ways the AI can behave
 prompts = {
     "default": """You are a helpful, friendly assistant named Buddy. 
     You provide concise and accurate information. 
@@ -44,30 +44,20 @@ prompts = {
     essential information."""
 }
 
-# Try to get API key from secrets
 try:
     st.session_state.api_key_from_secrets = st.secrets.get("GOOGLE_API_KEY", "")
 except:
-    # If there's any error accessing secrets, just continue
     pass
 
-# Function to initialize or reset chat
+# Set up new chat session
 def init_chat(api_key):
     if not api_key:
         return None
         
-    # Configure the library with API key
     genai.configure(api_key=api_key)
-    
-    # Set up the model
     model = genai.GenerativeModel('gemini-1.5-pro')
-    
-    # Create a chat session
     chat = model.start_chat(history=[])
-    
-    # Send the system prompt based on current mode
     chat.send_message(prompts[st.session_state.current_mode])
-    
     return chat
 
 # Function to change persona mode
@@ -75,7 +65,6 @@ def change_mode(mode):
     if mode != st.session_state.current_mode:
         st.session_state.current_mode = mode
         
-        # Send the new system prompt to update behavior
         try:
             if st.session_state.chat:
                 response = st.session_state.chat.send_message(prompts[mode])
@@ -85,17 +74,15 @@ def change_mode(mode):
             
         st.rerun()
 
-# Function to download chat history
+# Save chat history as JSON file
 def download_chat_history():
     chat_data = {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "messages": st.session_state.messages
     }
     
-    # Convert to JSON string
     chat_json = json.dumps(chat_data, indent=2)
     
-    # Create download link
     st.download_button(
         label="Download Chat History",
         data=chat_json,
@@ -103,11 +90,10 @@ def download_chat_history():
         mime="application/json"
     )
 
-# Function to handle chat reset/exit
+# Handle chat reset/exit
 def reset_chat():
     st.session_state.messages = []
     
-    # Get the current API key (either from input or secrets)
     api_key = st.session_state.api_key_from_secrets
     if not api_key and "api_key" in st.session_state:
         api_key = st.session_state.api_key
@@ -129,17 +115,14 @@ st.title("🤖 AI Chatbot Assistant")
 with st.sidebar:
     st.header("Settings")
     
-    # API Key handling
     if st.session_state.api_key_from_secrets:
         st.success("API key loaded from secrets!")
         active_api_key = st.session_state.api_key_from_secrets
         
-        # Initialize chat if not already done
         if st.session_state.chat is None:
             st.session_state.chat = init_chat(active_api_key)
             st.session_state.messages.append({"role": "assistant", "content": "Hi there! I'm Buddy, your AI assistant. How can I help you today?"})
     else:
-        # If no secrets, show API key input
         st.text_input(
             "Enter your Google AI Studio API key:", 
             type="password", 
@@ -149,9 +132,8 @@ with st.sidebar:
         
         active_api_key = st.session_state.get("api_key", "")
     
-    # Only show the rest of the controls if we have an API key
+    # Only show the rest of the controls if API key is provided
     if active_api_key:
-        # Persona selection
         st.subheader("Persona Selection")
         st.write("Choose the AI assistant's persona:")
         
@@ -167,7 +149,6 @@ with st.sidebar:
             if st.button("Concise", use_container_width=True):
                 change_mode("concise")
         
-        # Current mode indicator
         st.info(f"Current mode: {st.session_state.current_mode.upper()}")
         
         # Download and reset options
@@ -187,7 +168,6 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Determine if we have an active API key
 active_api_key = st.session_state.api_key_from_secrets
 if not active_api_key and "api_key" in st.session_state:
     active_api_key = st.session_state.api_key
@@ -195,25 +175,19 @@ if not active_api_key and "api_key" in st.session_state:
 # Accept user input if API key is available
 if active_api_key:
     if prompt := st.chat_input("Type your message here..."):
-        # Add user message to chat history
         st.session_state.messages.append({"role": "user", "content": prompt})
-        
-        # Display user message in chat message container
+
         with st.chat_message("user"):
             st.markdown(prompt)
-        
-        # Display assistant response in chat message container
+
         with st.chat_message("assistant"):
             message_placeholder = st.empty()
             
             try:
-                # Get response from the model
                 response = st.session_state.chat.send_message(prompt)
-                
-                # Display the response
+
                 message_placeholder.markdown(response.text)
-                
-                # Add assistant response to chat history
+
                 st.session_state.messages.append({"role": "assistant", "content": response.text})
                 
             except Exception as e:
