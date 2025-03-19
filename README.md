@@ -1,15 +1,15 @@
-# AI Chatbot with Google Gemini and Streamlit
+# Buddy AI Assistant with Google Gemini and Streamlit
 
 ![Chatbot Demo](https://img.shields.io/badge/demo-live-success)
 ![Python](https://img.shields.io/badge/python-3.7+-blue.svg)
 ![Streamlit](https://img.shields.io/badge/streamlit-1.32.0-red.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-A beginner-friendly AI chatbot using Google's Gemini AI model and Streamlit for the web interface. This project demonstrates how to create a conversational agent with multiple personas and basic prompt engineering techniques.
+Buddy an AI Assistant using Google's Gemini AI model and Streamlit for the web interface. This is a conversational ai assistant with multiple personas developed with basic prompt engineering techniques.
 
 ## Live Demo
 
-Try the chatbot live: [AI Chatbot Demo](https://buddy-ai-assistant.streamlit.app/)
+Try the chatbot live: [Buddy AI Assistant](https://buddy-ai-assistant.streamlit.app/)
 
 ## Video Demo
 
